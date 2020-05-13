@@ -49,18 +49,3 @@ npm run lint
 - [Vue](https://github.com/vuejs/vue)
 - [Webpack](https://github.com/webpack/webpack)
 
-## 效果展示
-
-![输入图片说明](https://images.gitee.com/uploads/images/2019/1123/123209_7b8c88d0_1185106.png "home.png")
-
-## 赞赏
-
-**请作者喝杯咖啡吧！(微信号/QQ号：99808359)**
-
-<img width="236" alt="微信扫一扫" src="https://images.gitee.com/uploads/images/2019/1122/203838_862f04ff_1185106.jpeg">
-
-## License
-
-[MIT](https://github.com/bstdn/vue-iview-admin/blob/master/LICENSE)
-
-Copyright (c) 2019-present, bstdn

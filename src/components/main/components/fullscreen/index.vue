@@ -68,6 +68,7 @@ export default {
     },
     handleChange() {
       this.handleFullscreen()
+     
     }
   }
 }

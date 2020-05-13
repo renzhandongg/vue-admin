@@ -1,10 +1,25 @@
 <template>
   <Layout style="height: 100%" class="main">
-    <Sider v-model="collapsed" hide-trigger collapsible :width="256" :collapsed-width="64" class="left-sider" :style="{overflow: 'hidden'}">
-      <side-menu ref="sideMenu" accordion :active-name="$route.name" :collapsed="collapsed" :menu-list="menuList" @on-select="turnToPage">
+    <Sider
+      v-model="collapsed"
+      hide-trigger
+      collapsible
+      :width="256"
+      :collapsed-width="64"
+      class="left-sider"
+      :style="{overflow: 'hidden'}"
+    >
+      <side-menu
+        ref="sideMenu"
+        accordion
+        :active-name="$route.name"
+        :collapsed="collapsed"
+        :menu-list="menuList"
+        @on-select="turnToPage"
+      >
         <div class="logo-con">
-          <img v-show="!collapsed" key="max-logo" :src="maxLogo">
-          <img v-show="collapsed" key="min-logo" :src="minLogo">
+          <img v-show="!collapsed" key="max-logo" :src="maxLogo" />
+          <img v-show="collapsed" key="min-logo" :src="minLogo" />
         </div>
       </side-menu>
     </Sider>
@@ -12,14 +27,24 @@
       <Header class="header-con">
         <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
           <user :user-avatar="userAvatar" />
-          <language v-if="$config.useI18n" style="margin-right: 10px;" :lang="local" @on-lang-change="setLocal" />
-          <fullscreen v-model="isFullscreen" style="margin-right: 10px;" />
+          <language
+            v-if="$config.useI18n"
+            style="margin-right: 10px"
+            :lang="local"
+            @on-lang-change="setLocal"
+          />
+          <fullscreen v-model="isFullscreen" style="margin-right: 10px" />
         </header-bar>
       </Header>
       <Content class="main-content-con">
         <Layout class="main-layout-con">
           <div class="tag-nav-wrapper">
-            <tags-nav :value="$route" :list="tagNavList" @input="handleClick" @on-close="handleCloseTag" />
+            <tags-nav
+              :value="$route"
+              :list="tagNavList"
+              @input="handleClick"
+              @on-close="handleCloseTag"
+            />
           </div>
           <Content class="content-wrapper">
             <keep-alive :include="cacheList">
@@ -42,8 +67,8 @@ import User from './components/user'
 import ABackTop from './components/a-back-top'
 import Language from './components/language'
 import Fullscreen from './components/fullscreen'
-import minLogo from '@/assets/images/logo-min.jpg'
-import maxLogo from '@/assets/images/logo.jpg'
+import minLogo from '@/assets/images/logo-min.png'
+import maxLogo from '@/assets/images/logo.png'
 import routers from '@/router/routers'
 import { getNewTagList, routeEqual } from '@/libs/util'
 
@@ -74,7 +99,12 @@ export default {
       return this.$store.state.user.userInfo.avatar
     },
     cacheList() {
-      return ['ParentView', ...this.tagNavList.length ? this.tagNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : []]
+      return [
+        'ParentView',
+        ...(this.tagNavList.length
+          ? this.tagNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name)
+          : [])
+      ]
     },
     menuList() {
       return this.$store.getters['app/menuList']
@@ -84,7 +114,7 @@ export default {
     }
   },
   watch: {
-    '$route'(newRoute) {
+    $route(newRoute) {
       const { name, query, params, meta } = newRoute
       this.addTag({
         route: { name, query, params, meta },
@@ -159,11 +189,12 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang='less'>
 .main {
   .logo-con {
     height: 64px;
-    padding: 10px;
+    padding : 10px;
+    background:#fff;
 
     img {
       height: 44px;
@@ -185,19 +216,19 @@ export default {
   }
 
   .main-content-con {
-    height: ~"calc(100% - 60px)";
+    height: ~'calc(100% - 60px)';
     overflow: hidden;
   }
 
   .tag-nav-wrapper {
     padding: 0;
     height: 40px;
-    background: #F0F0F0;
+    background: #f0f0f0;
   }
 
   .content-wrapper {
     padding: 18px;
-    height: ~"calc(100% - 80px)";
+    height: ~'calc(100% - 80px)';
     overflow: auto;
   }
 
