@@ -1,11 +1,25 @@
 <template>
-  <div>
+  <div style='width:1610px'>
+    <div class="content">
+      公司主要经营指标市场竞争力简表
+    </div>
     <Row>
       <Col span="18">
-      <div id="indicators" style="height: 500px;"></div>
+      <div id="indicators" style="height: 400px"></div>
       </Col>
       <Col span="6">
-      <div id="economic" style="height: 500px;"></div>
+      <div id="economic" style="height: 400px"></div>
+      </Col>
+    </Row>
+    <Row >
+      <Col span="6">
+      <div id="investmentBank" style="height: 400px"></div>
+      </Col>
+      <Col span="6">
+      <div id="threeNewBoard" style="height: 400px"></div>
+      </Col>
+      <Col span="6">
+      <div id="assets" style="height: 400px"></div>
       </Col>
     </Row>
   </div>
@@ -13,20 +27,107 @@
 
 <script>
 import echarts from "echarts"
-import { on, off } from '@/libs/util'
+import { on, off ,getEle} from '@/libs/util'
 export default {
   name: 'Home',
   data() {
     return {
       indicators: null,
-      economic: null
+      economic: null,
+      investmentBank:null,
+      threeNewBoard:null,
+      assets:null,
+      option :{
+         title: {
+            text: '主要指标',
+            textStyle:{
+               fontSize:14
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow',
+                label: {
+                    show: true
+                }
+            }
+        },
+        // toolbox: {
+        //     show: true,
+        //     feature: {
+        //         mark: {show: true},
+        //         dataView: {show: true, readOnly: false},
+        //         magicType: {show: true, type: ['line', 'bar']},
+        //         restore: {show: true},
+        //         saveAsImage: {show: true}
+        //     }
+        // },
+        calculable: true,
+        legend: {
+            data: ['我司','xx司'],
+            itemGap: 5
+        },
+        // grid: {
+        //     top: '12%',
+        //     left: '1%',
+        //     right: '10%',
+        //     containLabel: true
+        // },
+        xAxis: [
+            {
+                type: 'category',
+                data: ['总额','市场份额','行业排名']
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value',
+                // name: 'Budget (million USD)',
+                axisLabel: {
+                    formatter: function (a) {
+                        a = +a;
+                        return isFinite(a)
+                            ? echarts.format.addCommas(+a / 1000)
+                            : '';
+                    }
+                }
+            }
+        ],
+        // dataZoom: [
+        //     {
+        //       type:'slider',
+        //     },
+        //     {
+        //         show: true,
+        //         start: 94,
+        //         end: 100
+        //     }
+        // ],
+        series: [
+            {
+                name: '我司',
+                type: 'bar',
+                data:[1,2,3]
+            },
+            {
+                name: 'xx司',
+                type: 'bar',
+                data: [5,6,7]
+            }
+        ]
+      }
     }
   },
   mounted() {
     this.$nextTick(() => {
-      on(window, "resize", this.resize)
+      // on(window, "resize", this.resize)
     })
-    this.setEcaharts()
+    this.setIndicatorsEcaharts();
+    this.setEconomicEcharts();
+    this.setInvestmentBankEcharts();
+    this.setThreeNewBoardEcharts();
+    this.setAssetsEcharts();
   },
   beforeDestroy() {
     off(window, "resize", this.resize)
@@ -34,105 +135,81 @@ export default {
   methods: {
     resize() {
       this.indicators.resize()
+      this.indicators.resize()
     },
-    getMaxDays(year, month) {
-      return new Date(year, month, 0).getDate()
+    setIndicatorsEcaharts() {
+      this.indicators = echarts.init(document.getElementById('indicators'));
+      this.indicators.setOption(this.option)
     },
-    setEcaharts() {
-      this.indicators = echarts.init(document.getElementById('indicators'))
-      this.indicators.setOption({
+    setEconomicEcharts(){
+      this.economic = echarts.init(document.getElementById('economic'));
+      let option = {
         title: {
-          text: '净资产收益率（%）',
-          x: 'center'
+            text: '经济业务',
+            textStyle:{
+               fontSize:14
+            }
         },
-        color: ['#3e6591', '#eb7d22', '#d73f45'],
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
+          xAxis: {
+              type: 'category',
+              data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          },
+          yAxis: {
+              type: 'value'
+          },
+          grid: {
+            top: '12%',
+            left: '1%',
+            right: '10%',
+            containLabel: true
         },
-        grid: {
-          left: 250
-        },
-        xAxis: {
-          axisLine: {
-            lineStyle: {
-              color: '#ccc'
+          series: [{
+              data: [120, 200, 150, 80, 70, 110, 130],
+              type: 'bar'
+          }]
+      };
+      this.economic.setOption(option)
+    },
+    setInvestmentBankEcharts(){
+      this.investmentBank = echarts.init(document.getElementById('investmentBank'));
+      let obj = {
+          text: '投行业务',
+          textStyle:{
+               fontSize:14
             }
-          },
-          axisLabel: {
-            textStyle: {
-              color: '#777'
+      }
+      let option ={... this.option,title:obj}
+      this.investmentBank.setOption(option)
+    },
+    setThreeNewBoardEcharts(){
+      this.threeNewBoard = echarts.init(document.getElementById('threeNewBoard'));
+      let obj = {
+          text: '新三板业务',
+          textStyle:{
+               fontSize:14
             }
-          }
-        },
-        yAxis: [{
-          type: 'category',
-          inverse: true,
-          splitLine: {
-            show: true
-          },
-          axisTick: {
-            length: 100,
-            lineStyle: {
-              color: '#ccc'
+      }
+      let option ={... this.option,title:obj}
+      this.threeNewBoard.setOption(option)
+    },
+    setAssetsEcharts(){
+      this.assets = echarts.init(document.getElementById('assets'));
+      let obj = {
+          text: '资产管理业务',
+          textStyle:{
+               fontSize:14
             }
-          },
-          data: ['最近第1年', '最近第2年', '最近第3年', '最近第1年', '最近第2年', '最近第3年', '最近第1年', '最近第2年', '最近第3年', '最近第1年', '最近第2年', '最近第3年']
-        }, {
-          nameLocation: 'start',
-          nameTextStyle: {
-            fontWeight: 'bold'
-          },
-          position: 'left',
-          offset: 220,
-          axisLine: {
-            onZero: false,
-            show: false
-          },
-          axisTick: {
-            length: 100,
-            inside: true,
-            lineStyle: {
-              color: '#ccc'
-            }
-          },
-          axisLabel: {
-            inside: true
-          },
-          inverse: true,
-          data: ['国网', '唯捷城配', '快狗速运', '驹马配送']
-        }],
-        series: [{
-          name: "武侯",
-          type: 'bar',
-          data: [10, 9, 8, 2, 1, 1, 2, 1, 1, 2, 1, 1],
-          label: {
-            normal: {
-              show: true,
-              position: 'right',
-              textStyle: {
-                color: '#008000'
-              }
-            }
-          }
-        }, {
-          name: "锦江",
-          type: 'bar',
-          data: [10, 9, 8, 2, 1, 1, 2, 1, 1, 2, 1, 1],
-          label: {
-            normal: {
-              show: true,
-              position: 'right',
-              textStyle: {
-                color: '#FFA500'
-              }
-            }
-          }
-        }]
-      })
+      }
+      let option ={... this.option,title:obj}
+      this.assets.setOption(option)
     }
   }
 }
 </script>
+<style>
+  .content{
+    text-align: center;
+    font-size: 24px;
+    padding: 0 0 10px 0;
+  }
+</style>
